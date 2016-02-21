@@ -44,7 +44,7 @@ if (module.hot) {
 ReactDOM.render(
   <Provider store={store}>
     <Router history={createHistory()}>
-      <Route component={App}>
+      <Route component={App} path='live'>
         <Route path="/" component={HomePage} />
         <Route path="*" component={NotFoundPage} />
       </Route>
