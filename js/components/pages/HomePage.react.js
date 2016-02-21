@@ -3,7 +3,7 @@
  * This is the first thing users see of our App
  */
 
-import { asyncGetStreams } from '../../actions/AppActions';
+import { changeLanguage, asyncFetchStreams } from '../../actions/AppActions';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
@@ -11,7 +11,10 @@ class HomePage extends Component {
 
     onLangSelected(e, code) {
         console.log('Lang selected', code);
-        this.props.dispatch(asyncGetStreams(code));
+        this.props.dispatch(changeLanguage(code));
+
+        // TODO: Proper error handling should come here
+        this.props.dispatch(asyncFetchStreams(code));
     }
 
     render() {
@@ -45,6 +48,7 @@ class HomePage extends Component {
 
 // Which props do we want to inject, given the global state?
 function select(state) {
+    console.debug('Global state', state);
     return {
         data: state
     };

@@ -6,4 +6,8 @@
  * Follow this format:
  * export const YOUR_ACTION_CONSTANT = 'YOUR_ACTION_CONSTANT';
  */
-export const GET_STREAMS = 'GET_STREAMS';
+export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE';
+export const CHANGE_BITRATE = 'CHANGE_BITRATE';
+
+export const REQUEST_STREAMS = 'REQUEST_STREAMS';
+export const RECEIVE_STREAMS = 'RECEIVE_STREAMS';

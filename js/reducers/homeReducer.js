@@ -13,7 +13,7 @@
  * add it in the rootReducer.js.
  */
 
-import { GET_STREAMS } from '../constants/AppConstants';
+import { RECEIVE_STREAMS, CHANGE_LANGUAGE, CHANGE_BITRATE } from '../constants/AppConstants';
 import assignToEmpty from '../utils/assign';
 
 const initialState = {
@@ -23,18 +23,22 @@ const initialState = {
         ['RU', 'Russian'],
         ['ES', 'Spanish']
     ]),
-    streams: {}
+    streams: {},
+    selectedLanguage: localStorage.getItem('selectedLanguage') || 'EN',
+    selectedBitrate: localStorage.getItem('selectedBitrate') || 600
 };
 
 function homeReducer(state = initialState, action) {
     Object.freeze(state); // Don't mutate state directly, always use assign()!
     switch (action.type) {
-        case GET_STREAMS:
-            let s = {};
-            s[action.lang] = action.data;
-            return assignToEmpty(state, {
-                streams: s
-            });
+        case CHANGE_LANGUAGE:
+            localStorage.setItem('selectedLanguage', action.lang);
+            return assignToEmpty(state, {selectedLanguage: action.lang});
+        case CHANGE_BITRATE:
+            localStorage.setItem('selectedBitrate', action.bitrate);
+            return assignToEmpty(state, {selectedBitrate: action.bitrate});
+        case RECEIVE_STREAMS:
+            return assignToEmpty(state, {streams: {[action.lang]: action.data}});
         default:
             return state;
     }

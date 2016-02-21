@@ -2,7 +2,7 @@
  * Actions change things in your application
  * Since this boilerplate uses a uni-directional data flow, specifically redux,
  * we have these actions which are the only way your application interacts with
- * your appliction state. This guarantees that your state is up to date and nobody
+ * your application state. This guarantees that your state is up to date and nobody
  * messes it up weirdly somewhere.
  *
  * To add a new Action:
@@ -27,21 +27,51 @@
 // It makes more sense to have the asnyc actions before the non-async ones
 /* eslint-disable no-use-before-define */
 
-import { GET_STREAMS } from '../constants/AppConstants';
+import request from 'superagent-es6-promise';
+import { REQUEST_STREAMS, RECEIVE_STREAMS, CHANGE_LANGUAGE } from '../constants/AppConstants';
 
-export function asyncGetStreams(lang) {
-    return (dispatch) => {
-        return dispatch(getStreams(name));
+const API_URL = window.BB.config.apiUrl;
+const TIMEOUT = 10000;
+
+
+export function changeLanguage(lang) {
+    return {
+        type: CHANGE_LANGUAGE,
+        lang: lang
+    }
+}
+
+function requestStreams(lang) {
+    return {
+        type: REQUEST_STREAMS,
+        lang: lang
+    }
+}
+
+export function receiveStreams(lang, json) {
+    return {
+        type: RECEIVE_STREAMS,
+        lang: lang,
+        data: json
     };
 }
 
-export function getStreams(lang) {
-    return {
-        type: GET_STREAMS,
-        lang: lang,
-        streams: [
-            {type:'HLS', url: 'http://some.url.com', bitrate: 600},
-            {type:'HLS', url: 'http://some.otherurl.com', bitrate: 300}
-        ]
+
+function apiRequest(path, payload) {
+    return request.post(API_URL + path)
+        .set('Content-Type', 'application/json')
+        .send(payload)
+        .timeout(TIMEOUT)
+}
+
+
+export function asyncFetchStreams(lang) {
+    return (dispatch) => {
+        dispatch(requestStreams(lang));
+
+        return apiRequest('streams', {lang: lang})
+            .then((res) => {
+                return dispatch(receiveStreams(lang, res));
+            }).promise();
     };
 }
