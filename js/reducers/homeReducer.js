@@ -18,10 +18,10 @@ import assignToEmpty from '../utils/assign';
 
 const initialState = {
     languages: new Map([
-        ['HE', 'Hebrew'],
-        ['EN', 'English'],
-        ['RU', 'Russian'],
-        ['ES', 'Spanish']
+        ['heb', 'Hebrew'],
+        ['eng', 'English'],
+        ['rus', 'Russian'],
+        ['spa', 'Spanish']
     ]),
     streams: {},
     selectedLanguage: localStorage.getItem('selectedLanguage') || 'EN',
