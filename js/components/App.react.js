@@ -8,13 +8,12 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Logo from '../../img/logo.png';
 
 class App extends Component {
   render() {
     return (
       <div className="wrapper">
-        <img className="logo" src={Logo} />
+        <h3>BB Player</h3>
         { this.props.children }
       </div>
     );

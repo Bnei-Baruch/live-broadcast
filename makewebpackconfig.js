@@ -1,7 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var AppCachePlugin = require('appcache-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = function(options) {
@@ -64,10 +63,6 @@ module.exports = function(options) {
     ]
   }
 
-  plugins.push(new AppCachePlugin({ // AppCache should be in both prod and dev env
-    exclude: ['.htaccess'] // No need to cache that. See https://support.hostgator.com/articles/403-forbidden-or-no-permission-to-access
-  }));
-
   return {
     entry: entry,
     output: { // Compile into js/build.js
@@ -111,4 +106,4 @@ module.exports = function(options) {
     stats: false, // Don't show stats in the console
     progress: true
   }
-}
+};
