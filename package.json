@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Single page for BB broadcast of public events in every language",
   "dependencies": {
+    "deep-assign": "^2.0.0",
     "history": "1.17.0",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",

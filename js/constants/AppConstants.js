@@ -6,5 +6,4 @@
  * Follow this format:
  * export const YOUR_ACTION_CONSTANT = 'YOUR_ACTION_CONSTANT';
  */
-export const CHANGE_PROJECT_NAME = 'CHANGE_PROJECT_NAME';
-export const CHANGE_OWNER_NAME = 'CHANGE_OWNER_NAME';
+export const GET_STREAMS = 'GET_STREAMS';
