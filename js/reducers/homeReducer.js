@@ -19,7 +19,7 @@ import assignToEmpty from '../utils/assign';
 const initialState = {
     languages: {},
     streams: {},
-    selectedLanguage: localStorage.getItem('live.selectedLanguage') || 'EN',
+    selectedLanguage: localStorage.getItem('live.selectedLanguage') || 'eng',
     selectedBitrate: localStorage.getItem('live.selectedBitrate') || 500
 };
 
