@@ -73,9 +73,10 @@ class HomePage extends Component {
         for (let code of Object.keys(languages)) {
             const lang = languages[code];
             langs.push((
-                <div className={"language translation-" + (lang.Translation ? 'active' : 'inactive')}
+                <div className="language"
                      key={code}
                      onClick={(e) => this.onLangSelected(code)}>
+                    <div className={"translation-indicator" + (lang.Translation ? 'active' : ' inactive')}></div>
                     {lang.Name}
                 </div>)
             );
