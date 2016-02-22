@@ -35,6 +35,7 @@ class HomePage extends Component {
 
         return (
             <div>
+                <h3>BB Live Broadcast</h3>
                 <div className="player">
                     <a className="btn" href="https://google.com">Play</a>
                 </div>

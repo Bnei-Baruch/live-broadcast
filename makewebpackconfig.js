@@ -81,6 +81,7 @@ module.exports = function (options) {
         devtool: devtool,
         output: { // Compile into js/build.js
             path: path.resolve(__dirname, options.prod ? './dist' : './build'),
+
             filename: '[name]-[hash].js'
         },
         module: {

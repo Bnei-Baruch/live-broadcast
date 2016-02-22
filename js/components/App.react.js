@@ -13,7 +13,6 @@ class App extends Component {
   render() {
     return (
       <div className="wrapper">
-        <h3>BB Live Broadcast</h3>
         { this.props.children }
       </div>
     );

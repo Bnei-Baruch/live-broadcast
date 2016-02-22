@@ -12,10 +12,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router, Route } from 'react-router';
+import IndexRoute from 'react-router/lib/IndexRoute'
+import Route from 'react-router/lib/Route'
+import Router from 'react-router/lib/Router'
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import createHistory from 'history/lib/createBrowserHistory';
+import useBasename from 'history/lib/useBasename';
 
 // Import the pages
 import HomePage from './components/pages/HomePage.react';
@@ -33,22 +36,27 @@ const store = createStoreWithMiddleware(rootReducer);
 
 // Make reducers hot reloadable, see http://stackoverflow.com/questions/34243684/make-redux-reducers-and-other-non-components-hot-loadable
 if (module.hot) {
-  module.hot.accept('./reducers/rootReducer', () => {
-    const nextRootReducer = require('./reducers/rootReducer').default;
-    store.replaceReducer(nextRootReducer);
-  });
+    module.hot.accept('./reducers/rootReducer', () => {
+        const nextRootReducer = require('./reducers/rootReducer').default;
+        store.replaceReducer(nextRootReducer);
+    });
 }
+
+const browserHistory = useBasename(createHistory)({
+    basename: module.hot ? '' : '/live'
+});
+
 
 // Mostly boilerplate, except for the Routes. These are the pages you can go to,
 // which are all wrapped in the App component, which contains the navigation etc
 ReactDOM.render(
-  <Provider store={store}>
-    <Router history={createHistory()}>
-      <Route component={App} path='live'>
-        <Route path="/" component={HomePage} />
-        <Route path="*" component={NotFoundPage} />
-      </Route>
-    </Router>
-  </Provider>,
-  document.getElementById('app')
+    <Provider store={store}>
+        <Router history={browserHistory}>
+            <Route component={App} path='/'>
+                <IndexRoute component={HomePage}/>
+                <Route path="*" component={NotFoundPage}/>
+            </Route>
+        </Router>
+    </Provider>,
+    document.getElementById('app')
 );
