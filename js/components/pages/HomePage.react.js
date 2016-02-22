@@ -17,25 +17,47 @@ class HomePage extends Component {
         this.props.dispatch(asyncFetchStreams(code));
     }
 
+    chooseStream(streams, bitrate) {
+        if (streams.has(bitrate)) {
+            return streams.get(bitrate);
+        } else {
+            return streams.values().next().value;
+        }
+    }
+
     render() {
-        const { languages } = this.props.data;
+        const { languages, streams, selectedLanguage, selectedBitrate } = this.props.data;
 
         const langs = [];
         for (let [code, display] of languages.entries()) {
-          langs.push((
-              <div className="language"
-                   key={code}
-                   onClick={(e) => this.onLangSelected(e, code)}>
-                  Lang: {code}: {display}
-              </div>)
-          ) ;
+            langs.push((
+                <div className="language"
+                     key={code}
+                     onClick={(e) => this.onLangSelected(e, code)}>
+                    Lang: {code}: {display}
+                </div>)
+            );
+        }
+        if (!!window.jwplayer && streams[selectedLanguage]) {
+            const s = this.chooseStream(streams[selectedLanguage], selectedBitrate),
+                sources = [{file: s.rtmp}, {file: s.hls}];
+            window.jwplayer("jwplayer-container").setup({
+                playlist: [{sources: sources}],
+                primary: 'flash',
+                androidhls: true,
+                autostart: true,
+                aspectratio: '16:9',
+                width: "100%"
+            });
         }
 
         return (
             <div>
                 <h3>BB Live Broadcast</h3>
                 <div className="player">
-                    <a className="btn" href="https://google.com">Play</a>
+                    <div id="jwplayer-container">
+                        <a className="btn" href="https://google.com">Play</a>
+                    </div>
                 </div>
                 <div className="languages">{langs}</div>
             </div>

@@ -52,8 +52,7 @@ export function receiveStreams(lang, data) {
     return {
         type: RECEIVE_STREAMS,
         lang: lang,
-        status: data.Status,
-        streams: data.Streams
+        data: data
     };
 }
 

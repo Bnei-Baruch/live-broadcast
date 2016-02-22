@@ -38,7 +38,12 @@ function homeReducer(state = initialState, action) {
             localStorage.setItem('live.selectedBitrate', action.bitrate);
             return assignToEmpty(state, {selectedBitrate: action.bitrate});
         case RECEIVE_STREAMS:
-            return assignToEmpty(state, {streams: {[action.lang]: action.streams}});
+            const streams = new Map(action.data.Streams.map((x) => {
+                const hls = x.hlsUrl,
+                    rtmp = x.netUrl + '/' + x.streamName;
+                return [x.bitRate, {hls, rtmp}]
+            }));
+            return assignToEmpty(state, {streams: {[action.lang]: streams}});
         default:
             return state;
     }
