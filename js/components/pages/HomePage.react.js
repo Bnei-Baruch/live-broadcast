@@ -76,7 +76,7 @@ class HomePage extends Component {
                 <div className="language"
                      key={code}
                      onClick={(e) => this.onLangSelected(code)}>
-                    <div className={"translation-indicator" + (lang.Translation ? 'active' : ' inactive')}></div>
+                    <div className={"translation-indicator" + (lang.Translation ? ' active' : ' inactive')}></div>
                     {lang.Name}
                 </div>)
             );
@@ -102,7 +102,7 @@ class HomePage extends Component {
                 <h3>BB Live Broadcast</h3>
                 <div className="player">
                     <div id="jwplayer-container">
-                        <a className="btn" href="https://google.com">Play</a>
+                        <div className="loading">Loading...</div>
                     </div>
                 </div>
                 <div className="languages">
