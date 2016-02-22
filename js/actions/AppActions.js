@@ -72,6 +72,6 @@ export function asyncFetchStreams(lang) {
         return apiRequest('streams', {lang: lang})
             .then((res) => {
                 return dispatch(receiveStreams(lang, res));
-            }).promise();
+            });
     };
 }
