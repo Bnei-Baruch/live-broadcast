@@ -20,8 +20,6 @@ class HomePage extends Component {
     render() {
         const { languages } = this.props.data;
 
-        console.log(languages);
-
         const langs = [];
         for (let [code, display] of languages.entries()) {
           langs.push((

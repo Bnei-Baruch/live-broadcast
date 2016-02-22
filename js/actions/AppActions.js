@@ -48,11 +48,12 @@ function requestStreams(lang) {
     }
 }
 
-export function receiveStreams(lang, json) {
+export function receiveStreams(lang, data) {
     return {
         type: RECEIVE_STREAMS,
         lang: lang,
-        data: json
+        status: data.status,
+        streams: data.streams
     };
 }
 
@@ -71,7 +72,7 @@ export function asyncFetchStreams(lang) {
 
         return apiRequest('streams', {lang: lang})
             .then((res) => {
-                return dispatch(receiveStreams(lang, res));
+                return dispatch(receiveStreams(lang, res.body));
             });
     };
 }

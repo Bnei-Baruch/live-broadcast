@@ -38,7 +38,7 @@ function homeReducer(state = initialState, action) {
             localStorage.setItem('live.selectedBitrate', action.bitrate);
             return assignToEmpty(state, {selectedBitrate: action.bitrate});
         case RECEIVE_STREAMS:
-            return assignToEmpty(state, {streams: {[action.lang]: action.data}});
+            return assignToEmpty(state, {streams: {[action.lang]: action.streams}});
         default:
             return state;
     }
