@@ -24,18 +24,18 @@ const initialState = {
         ['spa', 'Spanish']
     ]),
     streams: {},
-    selectedLanguage: localStorage.getItem('selectedLanguage') || 'EN',
-    selectedBitrate: localStorage.getItem('selectedBitrate') || 600
+    selectedLanguage: localStorage.getItem('live.selectedLanguage') || 'EN',
+    selectedBitrate: localStorage.getItem('live.selectedBitrate') || 600
 };
 
 function homeReducer(state = initialState, action) {
     Object.freeze(state); // Don't mutate state directly, always use assign()!
     switch (action.type) {
         case CHANGE_LANGUAGE:
-            localStorage.setItem('selectedLanguage', action.lang);
+            localStorage.setItem('live.selectedLanguage', action.lang);
             return assignToEmpty(state, {selectedLanguage: action.lang});
         case CHANGE_BITRATE:
-            localStorage.setItem('selectedBitrate', action.bitrate);
+            localStorage.setItem('live.selectedBitrate', action.bitrate);
             return assignToEmpty(state, {selectedBitrate: action.bitrate});
         case RECEIVE_STREAMS:
             return assignToEmpty(state, {streams: {[action.lang]: action.data}});
