@@ -3,14 +3,55 @@
  * This is the first thing users see of our App
  */
 
-import { changeLanguage, asyncFetchStreams } from '../../actions/AppActions';
+import { changeLanguage, asyncHeartbeat ,asyncFetchStreams } from '../../actions/AppActions';
+import { HEARTBEAT_INTERVAL } from '../../constants/AppConstants';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 class HomePage extends Component {
 
-    onLangSelected(e, code) {
+    componentDidMount() {
+        this.resetHeartbeat();
+        this.props.dispatch(asyncFetchStreams(this.props.data.selectedLanguage));
+    }
+
+    componentWillUnmount() {
+        if (!!this.state.heartbeatTimerId) {
+            clearInterval(this.state.heartbeatTimerId);
+        }
+    }
+
+    constructor() {
+        super();
+        this.state = {
+            heartbeatTimerId: null,
+            prevLang: null
+        };
+    }
+
+    resetHeartbeat() {
+        if (this.state.heartbeatTimerId) {
+            clearInterval(this.state.heartbeatTimerId);
+        }
+        this.dispatchHeartbeat();
+        this.setState({
+            heartbeatTimerId: setInterval(this.dispatchHeartbeat.bind(this), HEARTBEAT_INTERVAL)
+        });
+    }
+
+    dispatchHeartbeat(){
+        const {selectedLanguage, selectedBitrate} = this.props.data;
+        this.props.dispatch(asyncHeartbeat(selectedLanguage, selectedBitrate));
+    }
+
+    onLangSelected(code) {
         console.log('Lang selected', code);
+        const jwp = jwplayer("jwplayer-container");
+        if (jwp.getState() != null) {
+            jwp.stop();
+            jwp.remove();
+        }
+
         this.props.dispatch(changeLanguage(code));
 
         // TODO: Proper error handling should come here
@@ -29,18 +70,22 @@ class HomePage extends Component {
         const { languages, streams, selectedLanguage, selectedBitrate } = this.props.data;
 
         const langs = [];
-        for (let [code, display] of languages.entries()) {
+        for (let code of Object.keys(languages)) {
+            const lang = languages[code];
             langs.push((
-                <div className="language"
+                <div className={"language translation-" + (lang.Translation ? 'active' : 'inactive')}
                      key={code}
-                     onClick={(e) => this.onLangSelected(e, code)}>
-                    Lang: {code}: {display}
+                     onClick={(e) => this.onLangSelected(code)}>
+                    {lang.Name}
                 </div>)
             );
         }
-        if (!!window.jwplayer && streams[selectedLanguage]) {
+        if (!!window.jwplayer &&
+            streams[selectedLanguage] &&
+            window.jwplayer("jwplayer-container").getState() == null) {
             const s = this.chooseStream(streams[selectedLanguage], selectedBitrate),
                 sources = [{file: s.rtmp}, {file: s.hls}];
+            console.log('Setting up player', sources.map((x) => x.file));
             window.jwplayer("jwplayer-container").setup({
                 playlist: [{sources: sources}],
                 primary: 'flash',
@@ -59,7 +104,10 @@ class HomePage extends Component {
                         <a className="btn" href="https://google.com">Play</a>
                     </div>
                 </div>
-                <div className="languages">{langs}</div>
+                <div className="languages">
+                    <h4>Languages</h4>
+                    {langs}
+                </div>
             </div>
         );
     }

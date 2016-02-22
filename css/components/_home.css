@@ -42,3 +42,14 @@
 	border-color: grey;
 	padding: 0.3em;
 }
+
+
+
+.translation-active {
+	color: lightgreen;
+}
+
+.translation-inactive {
+	color: tomato;
+	text-decoration: line-through;
+}

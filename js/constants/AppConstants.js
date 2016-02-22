@@ -6,8 +6,16 @@
  * Follow this format:
  * export const YOUR_ACTION_CONSTANT = 'YOUR_ACTION_CONSTANT';
  */
+
+// Misc
+export const HEARTBEAT_INTERVAL = 5000;
+
+// Actions
+
 export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE';
 export const CHANGE_BITRATE = 'CHANGE_BITRATE';
 
+export const REQUEST_HEARTBEAT = 'REQUEST_HEARTBEAT';
+export const RECEIVE_HEARTBEAT = 'RECEIVE_HEARTBEAT';
 export const REQUEST_STREAMS = 'REQUEST_STREAMS';
 export const RECEIVE_STREAMS = 'RECEIVE_STREAMS';

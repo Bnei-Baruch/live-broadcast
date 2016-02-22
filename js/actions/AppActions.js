@@ -28,7 +28,8 @@
 /* eslint-disable no-use-before-define */
 
 import request from 'superagent-es6-promise';
-import { REQUEST_STREAMS, RECEIVE_STREAMS, CHANGE_LANGUAGE } from '../constants/AppConstants';
+import { CHANGE_LANGUAGE, CHANGE_BITRATE, REQUEST_STREAMS, RECEIVE_STREAMS, REQUEST_HEARTBEAT,
+    RECEIVE_HEARTBEAT } from '../constants/AppConstants';
 
 const API_URL = window.BB.config.apiUrl;
 const TIMEOUT = 10000;
@@ -39,6 +40,23 @@ export function changeLanguage(lang) {
         type: CHANGE_LANGUAGE,
         lang: lang
     }
+}
+
+function requestHeartbeat(lang, bitrate) {
+    return {
+        type: REQUEST_HEARTBEAT,
+        lang: lang,
+        bitrate: bitrate
+    }
+}
+
+export function receiveHeartbeat(lang, bitrate, data) {
+    return {
+        type: RECEIVE_HEARTBEAT,
+        lang: lang,
+        bitrate: bitrate,
+        data: data
+    };
 }
 
 function requestStreams(lang) {
@@ -56,6 +74,7 @@ export function receiveStreams(lang, data) {
     };
 }
 
+// Backend api related stuff
 
 function apiRequest(path, payload) {
     return request.post(API_URL + path)
@@ -64,12 +83,23 @@ function apiRequest(path, payload) {
         .timeout(TIMEOUT)
 }
 
+export function asyncHeartbeat(lang, bitrate) {
+    console.log('Heartbeat:', lang,bitrate);
+    return (dispatch) => {
+        dispatch(requestHeartbeat(lang, bitrate));
+
+        return apiRequest('heartbeat', {lang, bitrate})
+            .then((res) => {
+                return dispatch(receiveHeartbeat(lang, bitrate, res.body));
+            });
+    };
+}
 
 export function asyncFetchStreams(lang) {
     return (dispatch) => {
         dispatch(requestStreams(lang));
 
-        return apiRequest('streams', {lang: lang})
+        return apiRequest('streams', {lang})
             .then((res) => {
                 return dispatch(receiveStreams(lang, res.body));
             });

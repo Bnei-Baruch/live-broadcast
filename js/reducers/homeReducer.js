@@ -13,19 +13,14 @@
  * add it in the rootReducer.js.
  */
 
-import { RECEIVE_STREAMS, CHANGE_LANGUAGE, CHANGE_BITRATE } from '../constants/AppConstants';
+import { RECEIVE_HEARTBEAT, RECEIVE_STREAMS, CHANGE_LANGUAGE, CHANGE_BITRATE } from '../constants/AppConstants';
 import assignToEmpty from '../utils/assign';
 
 const initialState = {
-    languages: new Map([
-        ['heb', 'Hebrew'],
-        ['eng', 'English'],
-        ['rus', 'Russian'],
-        ['spa', 'Spanish']
-    ]),
+    languages: {},
     streams: {},
     selectedLanguage: localStorage.getItem('live.selectedLanguage') || 'EN',
-    selectedBitrate: localStorage.getItem('live.selectedBitrate') || 600
+    selectedBitrate: localStorage.getItem('live.selectedBitrate') || 500
 };
 
 function homeReducer(state = initialState, action) {
@@ -37,6 +32,8 @@ function homeReducer(state = initialState, action) {
         case CHANGE_BITRATE:
             localStorage.setItem('live.selectedBitrate', action.bitrate);
             return assignToEmpty(state, {selectedBitrate: action.bitrate});
+        case RECEIVE_HEARTBEAT:
+            return assignToEmpty(state, {languages: action.data.Languages});
         case RECEIVE_STREAMS:
             const streams = new Map(action.data.Streams.map((x) => {
                 const hls = x.hlsUrl,
