@@ -2,7 +2,20 @@
 HOME="~/nom/projects/live-broadcast"
 cd $HOME
 pwd
-npm run build
-git add dist/*
-git commit -am "production build"
-git push origin master
+
+#!/usr/bin/env bash
+#
+echo "-----> Releasing live broadcast client" && (
+  echo "npm run build" &&
+  npm run build &&
+  echo "git add dist/*" &&
+  git add dist/* &&
+  echo "git commit -am 'production build'" &&
+  git commit -am "production build" &&
+  echo "git push origin master" &&
+  git push origin master &&
+  echo "" &&
+  echo "-----> Done."
+) || (
+  echo "! ERROR: Release failed."
+)
