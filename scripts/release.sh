@@ -11,6 +11,7 @@ echo "-----> Releasing live broadcast client" && (
   echo "git add dist/*" &&
   git add dist/* &&
   echo "git commit -am 'production build'" &&
+  git config -l &&
   git commit -am "production build" &&
   echo "git push origin master" &&
   git push origin master &&
