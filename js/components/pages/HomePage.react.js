@@ -3,7 +3,7 @@
  * This is the first thing users see of our App
  */
 
-import { changeLanguage, asyncHeartbeat ,asyncFetchStreams } from '../../actions/AppActions';
+import { changeLanguage, changeBitrate, asyncHeartbeat ,asyncFetchStreams } from '../../actions/AppActions';
 import { HEARTBEAT_INTERVAL } from '../../constants/AppConstants';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -24,8 +24,7 @@ class HomePage extends Component {
     constructor() {
         super();
         this.state = {
-            heartbeatTimerId: null,
-            prevLang: null
+            heartbeatTimerId: null
         };
     }
 
@@ -46,16 +45,23 @@ class HomePage extends Component {
 
     onLangSelected(code) {
         console.log('Lang selected', code);
+        this.clearPlayer();
+        this.props.dispatch(changeLanguage(code));
+        this.props.dispatch(asyncFetchStreams(code));
+    }
+
+    onBitrateSelected(bitrate) {
+        console.log('Bitrate selected', bitrate);
+        this.clearPlayer();
+        this.props.dispatch(changeBitrate(bitrate));
+    }
+
+    clearPlayer() {
         const jwp = jwplayer("jwplayer-container");
         if (jwp.getState() != null) {
             jwp.stop();
             jwp.remove();
         }
-
-        this.props.dispatch(changeLanguage(code));
-
-        // TODO: Proper error handling should come here
-        this.props.dispatch(asyncFetchStreams(code));
     }
 
     chooseStream(streams, bitrate) {
@@ -69,9 +75,13 @@ class HomePage extends Component {
     render() {
         const { languages, streams, selectedLanguage, selectedBitrate } = this.props.data;
 
+        let langPhrase = '';
         const langs = [];
         for (let code of Object.keys(languages)) {
             const lang = languages[code];
+            if (code == selectedLanguage) {
+                langPhrase = 'Playing ' + lang.Name;
+            }
             langs.push((
                 <div className="language"
                      key={code}
@@ -81,6 +91,23 @@ class HomePage extends Component {
                 </div>)
             );
         }
+
+        const bitrates = [];
+        if (streams[selectedLanguage]) {
+            for (let bitrate of streams[selectedLanguage].keys()) {
+                bitrates.push((
+                    <span className="bitrate-option" key={bitrate}>
+                        <input type="radio" name="bitrate"
+                           value={bitrate}
+                           checked={selectedBitrate == bitrate}
+                           onChange={(e) => this.onBitrateSelected(bitrate)}
+                        />
+                        {bitrate}k
+                    </span>
+                ));
+            }
+        }
+
         if (!!window.jwplayer &&
             streams[selectedLanguage] &&
             window.jwplayer("jwplayer-container").getState() == null) {
@@ -101,6 +128,11 @@ class HomePage extends Component {
             <div>
                 <h3>BB Live Broadcast</h3>
                 <div className="player">
+                    <div className="bitrate-menu">
+                        <span className="title">{langPhrase},</span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <span className="bitrates">Quality: {bitrates}</span>
+                    </div>
                     <div id="jwplayer-container">
                         <div className="loading">Loading...</div>
                     </div>

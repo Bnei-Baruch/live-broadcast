@@ -42,6 +42,14 @@ export function changeLanguage(lang) {
     }
 }
 
+
+export function changeBitrate(bitrate) {
+    return {
+        type: CHANGE_BITRATE,
+        bitrate: bitrate
+    }
+}
+
 function requestHeartbeat(lang, bitrate) {
     return {
         type: REQUEST_HEARTBEAT,
