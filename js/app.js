@@ -17,7 +17,8 @@ import Route from 'react-router/lib/Route'
 import Router from 'react-router/lib/Router'
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import createHistory from 'history/lib/createBrowserHistory';
+//import createHistory from 'history/lib/createBrowserHistory';
+import createHistory from 'history/lib/createHashHistory';
 import useBasename from 'history/lib/useBasename';
 
 // Import the pages
