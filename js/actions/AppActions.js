@@ -29,7 +29,7 @@
 
 import request from 'superagent-es6-promise';
 import { CHANGE_LANGUAGE, CHANGE_BITRATE, REQUEST_STREAMS, RECEIVE_STREAMS, REQUEST_HEARTBEAT,
-    RECEIVE_HEARTBEAT } from '../constants/AppConstants';
+    RECEIVE_HEARTBEAT, TOGGLE_TRANSLATION } from '../constants/AppConstants';
 
 const API_URL = window.BB.config.apiUrl;
 const TIMEOUT = 10000;
@@ -82,6 +82,15 @@ export function receiveStreams(lang, data) {
     };
 }
 
+export function toggleTranslation(lang, state, data) {
+   return {
+        type: TOGGLE_TRANSLATION,
+        lang: lang,
+        state: state,
+        data: data
+    };
+}
+
 // Backend api related stuff
 
 function apiRequest(path, payload) {
@@ -110,6 +119,15 @@ export function asyncFetchStreams(lang) {
         return apiRequest('streams', {lang})
             .then((res) => {
                 return dispatch(receiveStreams(lang, res.body));
+            });
+    };
+}
+
+export function asyncToggleTranslation(lang, state) {
+    return (dispatch) => {
+        return apiRequest(state ? 'tron' : 'troff', {lang})
+            .then((res) => {
+                return dispatch(toggleTranslation(lang, state, res.body));
             });
     };
 }

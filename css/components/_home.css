@@ -12,10 +12,21 @@
     text-decoration: none;
 }
 
+.translation-toggle {
+    height: 25px;
+    margin-left: 10px;
+    font-size: 10px;
+    float: right;
+}
+
 .player {
     width: 80%;
     display: inline-block;
     float: left;
+}
+
+.player.admin {
+    width: 60%;
 }
 
 @media (max-width: 600px) {
@@ -26,11 +37,17 @@
 
 .bitrate-menu {
     display: inline-block;
-    float: right;
+    /*float: right;*/
+    width: 100%;
     margin-bottom: 10px;
 }
 .bitrate-option {
     margin-left: 10px;
+}
+
+.bitrate-menu .title {
+    float: left;
+    color: blue;
 }
 
 .languages {

@@ -22,6 +22,7 @@ import useBasename from 'history/lib/useBasename';
 
 // Import the pages
 import HomePage from './components/pages/HomePage.react';
+import AdminPage from './components/pages/AdminPage.react';
 import NotFoundPage from './components/pages/NotFound.react';
 import App from './components/App.react';
 
@@ -54,6 +55,7 @@ ReactDOM.render(
         <Router history={browserHistory}>
             <Route component={App} path='/'>
                 <IndexRoute component={HomePage}/>
+                <Route path="admin" component={AdminPage}/>
                 <Route path="*" component={NotFoundPage}/>
             </Route>
         </Router>
