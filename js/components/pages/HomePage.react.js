@@ -83,12 +83,12 @@ class HomePage extends Component {
                 langPhrase = 'Playing ' + lang.Name;
             }
             langs.push((
-                <div className="language"
+                <li className={"language " + (code == selectedLanguage ? "active" : "")}
                      key={code}
                      onClick={(e) => this.onLangSelected(code)}>
                     <div className={"translation-indicator" + (lang.Translation ? ' active' : ' inactive')}></div>
                     {lang.Name}
-                </div>)
+                </li>)
             );
         }
 
@@ -139,7 +139,9 @@ class HomePage extends Component {
                 </div>
                 <div className="languages">
                     <h4>Languages</h4>
-                    {langs}
+                    <ul className="languages-list">
+                        {langs}
+                    </ul>
                 </div>
             </div>
         );

@@ -33,7 +33,7 @@ class AdminPage extends Component {
         });
     }
 
-    dispatchHeartbeat(){
+    dispatchHeartbeat() {
         const {selectedLanguage, selectedBitrate} = this.props.data;
         this.props.dispatch(asyncHeartbeat(selectedLanguage, selectedBitrate));
     }
@@ -77,13 +77,13 @@ class AdminPage extends Component {
                 langPhrase = 'Playing ' + lang.Name;
             }
             langs.push((
-                <div className="language"
-                     key={code}
-                     onClick={(e) => this.onLangSelected(code)}>
+                <li className={"language " + (code == selectedLanguage ? "active" : "")}
+                    key={code}
+                    onClick={(e) => this.onLangSelected(code)}>
                     <div className={"translation-indicator" + (lang.Translation ? ' active' : ' inactive')}></div>
                     {lang.Name}
                     <div className="btn translation-toggle" onClick={(e) => this.onToggleTranslation(code)}>Toggle</div>
-                </div>)
+                </li>)
             );
         }
 
@@ -116,7 +116,9 @@ class AdminPage extends Component {
                 </div>
                 <div className="languages">
                     <h4>Languages</h4>
-                    {langs}
+                    <ul className="languages-list">
+                        {langs}
+                    </ul>
                 </div>
             </div>
         );

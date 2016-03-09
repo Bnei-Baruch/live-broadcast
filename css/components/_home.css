@@ -20,7 +20,7 @@
 }
 
 .player {
-    width: 80%;
+    width: 70%;
     display: inline-block;
     float: left;
 }
@@ -29,18 +29,13 @@
     width: 60%;
 }
 
-@media (max-width: 600px) {
-  .player {
-    width: 70%;
-  }
-}
-
 .bitrate-menu {
     display: inline-block;
     /*float: right;*/
     width: 100%;
     margin-bottom: 10px;
 }
+
 .bitrate-option {
     margin-left: 10px;
 }
@@ -55,8 +50,18 @@
     float: right;
 }
 
+.languages-list {
+    list-style: none;
+    padding: 0;
+    column-count: 2;
+    column-gap: 20px;
+}
+
 .language {
-    padding: 5px;
+    padding: 10px 5px;
+}
+.language.active{
+    background-color: blueviolet;
 }
 
 .language:hover {
@@ -79,4 +84,16 @@
 
 .inactive {
     background-color: tomato;
+}
+
+
+@media (max-width: 800px) {
+    .player {
+        width: 100%;
+    }
+
+    .languages {
+        float: none;
+        display: block;
+    }
 }
