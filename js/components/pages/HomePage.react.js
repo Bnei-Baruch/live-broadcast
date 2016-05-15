@@ -73,7 +73,7 @@ class HomePage extends Component {
     }
 
     render() {
-        const { languages, streams, selectedLanguage, selectedBitrate } = this.props.data;
+        const { languages, streams, selectedLanguage, selectedBitrate, broadcast } = this.props.data;
 
         let langPhrase = '';
         const langs = [];
@@ -108,20 +108,29 @@ class HomePage extends Component {
             }
         }
 
-        if (!!window.jwplayer &&
-            streams[selectedLanguage] &&
-            window.jwplayer("jwplayer-container").getState() == null) {
-            const s = this.chooseStream(streams[selectedLanguage], selectedBitrate),
-                sources = [{file: s.rtmp}, {file: s.hls}];
-            console.log('Setting up player', sources.map((x) => x.file));
-            window.jwplayer("jwplayer-container").setup({
-                playlist: [{sources: sources}],
-                primary: 'flash',
-                androidhls: true,
-                autostart: true,
-                aspectratio: '16:9',
-                width: "100%"
-            });
+        let statusPhrase;
+        if (!!broadcast) {
+            statusPhrase = (<div className="loading">Loading...</div>);
+            if (!!window.jwplayer &&
+                streams[selectedLanguage] &&
+                window.jwplayer("jwplayer-container").getState() == null) {
+                const s = this.chooseStream(streams[selectedLanguage], selectedBitrate),
+                    sources = [{file: s.rtmp}, {file: s.hls}];
+                console.log('Setting up player', sources.map((x) => x.file));
+                window.jwplayer("jwplayer-container").setup({
+                    playlist: [{sources: sources}],
+                    primary: 'flash',
+                    androidhls: true,
+                    autostart: true,
+                    aspectratio: '16:9',
+                    width: "100%"
+                });
+            }
+        } else {
+            const msg = languages.hasOwnProperty(selectedLanguage) ? 
+                languages[selectedLanguage].Offline : 
+                "No broadcast now";
+            statusPhrase = (<div className="loading">{msg}</div>);
         }
 
         return (
@@ -134,7 +143,7 @@ class HomePage extends Component {
                         <span className="bitrates">Quality: {bitrates}</span>
                     </div>
                     <div id="jwplayer-container">
-                        <div className="loading">Loading...</div>
+                        {statusPhrase}
                     </div>
                 </div>
                 <div className="languages">

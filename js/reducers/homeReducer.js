@@ -33,7 +33,9 @@ function homeReducer(state = initialState, action) {
             localStorage.setItem('live.selectedBitrate', action.bitrate);
             return assignToEmpty(state, {selectedBitrate: action.bitrate});
         case RECEIVE_HEARTBEAT:
-            return assignToEmpty(state, {languages: action.data.Languages});
+            return assignToEmpty(state, {
+                languages: action.data.Languages, 
+                broadcast: action.data.Broadcast});
         case RECEIVE_STREAMS:
             const streams = new Map(action.data.Streams.map((x) => {
                 const hls = x.hlsUrl,
