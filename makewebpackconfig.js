@@ -4,7 +4,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = function (options) {
-    var entry, jsLoaders, plugins, cssLoaders, debug, devtool;
+    var entry, plugins, cssLoaders, debug, devtool;
 
     // If production is true
     if (options.prod) {
@@ -86,13 +86,28 @@ module.exports = function (options) {
         },
         module: {
             loaders: [{
-                test: /\.js$/, // Transform all .js files required somewhere within an entry point...
-                loader: 'babel', // ...with the specified loaders...
-                exclude: path.join(__dirname, '/node_modules/') // ...except for the node_modules folder.
-            }, {
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
+                loader: 'babel',
+                query: {
+                    cacheDirectory: true,
+                    plugins: ['transform-runtime'],
+                    presets: ['es2015', 'react', 'stage-2'],
+                    env: {
+                        production: {
+                            presets: ['react-optimize']
+                        },
+                        development: {
+                            presets: ['react-hmre']
+                        }
+                    }
+                }
+            },
+                {
                 test: /\.css$/, // Transform all .css files required somewhere within an entry point...
                 loader: cssLoaders // ...with PostCSS
-            }, {
+            },
+            {
                 test: /\.jpe?g$|\.gif$|\.png$/i,
                 loader: "url-loader?limit=10000"
             }
