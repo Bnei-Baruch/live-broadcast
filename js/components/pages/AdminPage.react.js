@@ -14,6 +14,7 @@ class AdminPage extends Component {
         if (!!this.state.heartbeatTimerId) {
             clearInterval(this.state.heartbeatTimerId);
         }
+        this.clearPlayer();
     }
 
     constructor() {
@@ -51,7 +52,7 @@ class AdminPage extends Component {
     }
 
     clearPlayer() {
-        const jwp = jwplayer("jwplayer-container");
+        const jwp = window.jwplayer("jwplayer-container");
         if (jwp.getState() != null) {
             jwp.stop();
             jwp.remove();
@@ -67,7 +68,7 @@ class AdminPage extends Component {
     }
 
     render() {
-        const { languages, streams, selectedLanguage } = this.props.data;
+        const { broadcast, languages, streams, selectedLanguage } = this.props.data;
 
         let langPhrase = '';
         const langs = [];
@@ -87,20 +88,29 @@ class AdminPage extends Component {
             );
         }
 
-        if (!!window.jwplayer &&
-            streams[selectedLanguage] &&
-            window.jwplayer("jwplayer-container").getState() == null) {
-            const s = this.chooseStream(streams[selectedLanguage]),
-                sources = [{file: s.rtmp}, {file: s.hls}];
-            console.log('Setting up player', sources.map((x) => x.file));
-            window.jwplayer("jwplayer-container").setup({
-                playlist: [{sources: sources}],
-                primary: 'flash',
-                androidhls: true,
-                autostart: true,
-                aspectratio: '16:9',
-                width: "100%"
-            });
+        let statusPhrase;
+        if (!!broadcast) {
+            statusPhrase = (<div className="loading">Loading...</div>);
+            if (!!window.jwplayer &&
+                streams[selectedLanguage] &&
+                window.jwplayer("jwplayer-container").getState() == null) {
+                const s = this.chooseStream(streams[selectedLanguage]),
+                    sources = [{file: s.rtmp}, {file: s.hls}];
+                console.log('Setting up player', sources.map((x) => x.file));
+                window.jwplayer("jwplayer-container").setup({
+                    playlist: [{sources: sources}],
+                    primary: 'flash',
+                    androidhls: true,
+                    autostart: true,
+                    aspectratio: '16:9',
+                    width: "100%"
+                });
+            }
+        } else {
+            const msg = languages.hasOwnProperty(selectedLanguage) ?
+                languages[selectedLanguage].Offline :
+                "No broadcast now";
+            statusPhrase = (<div className="loading">{msg}</div>);
         }
 
         return (
@@ -111,7 +121,7 @@ class AdminPage extends Component {
                         <span className="title">{langPhrase},</span>
                     </div>
                     <div id="jwplayer-container">
-                        <div className="loading">Loading...</div>
+                        {statusPhrase}
                     </div>
                 </div>
                 <div className="languages">

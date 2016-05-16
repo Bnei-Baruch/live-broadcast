@@ -19,6 +19,7 @@ class HomePage extends Component {
         if (!!this.state.heartbeatTimerId) {
             clearInterval(this.state.heartbeatTimerId);
         }
+        this.clearPlayer();
     }
 
     constructor() {
@@ -57,7 +58,7 @@ class HomePage extends Component {
     }
 
     clearPlayer() {
-        const jwp = jwplayer("jwplayer-container");
+        const jwp = window.jwplayer("jwplayer-container");
         if (jwp.getState() != null) {
             jwp.stop();
             jwp.remove();
