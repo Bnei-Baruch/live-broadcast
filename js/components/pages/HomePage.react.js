@@ -58,10 +58,12 @@ class HomePage extends Component {
     }
 
     clearPlayer() {
-        const jwp = jwplayer("jwplayer-container");
-        if (jwp.getState() != null) {
-            jwp.stop();
-            jwp.remove();
+        if (!!window.jwplayer) {
+            const jwp = window.jwplayer("jwplayer-container");
+            if (jwp.getState() != null) {
+                jwp.stop();
+                jwp.remove();
+            }
         }
     }
 
