@@ -12,6 +12,11 @@
     text-decoration: none;
 }
 
+.btn:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
 .translation-toggle {
     height: 25px;
     margin-left: 10px;
@@ -25,7 +30,7 @@
     float: left;
 }
 
-.player.admin {
+.admin .player {
     width: 60%;
 }
 
@@ -85,11 +90,6 @@
 
 .inactive {
     background-color: tomato;
-}
-
-.loading {
-    background-color: orange;
-    height: 300px;
 }
 
 @media (max-width: 800px) {

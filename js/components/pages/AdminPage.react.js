@@ -1,143 +1,62 @@
-import { changeLanguage, asyncHeartbeat ,asyncFetchStreams, asyncToggleTranslation } from '../../actions/AppActions';
-import { HEARTBEAT_INTERVAL } from '../../constants/AppConstants';
-import NoBroadcast from '../NoBroadcast.react'
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import PlayerPage from './PlayerPage.react'
+import {asyncToggleTranslation} from '../../actions/AppActions';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 
-class AdminPage extends Component {
-
-    componentDidMount() {
-        this.resetHeartbeat();
-        this.props.dispatch(asyncFetchStreams(this.props.data.selectedLanguage));
-    }
-
-    componentWillUnmount() {
-        if (this.state.heartbeatTimerId) {
-            clearInterval(this.state.heartbeatTimerId);
-        }
-        this.clearPlayer();
-    }
-
-    constructor() {
-        super();
-        this.state = {
-            heartbeatTimerId: null
-        };
-    }
-
-    resetHeartbeat() {
-        if (this.state.heartbeatTimerId) {
-            clearInterval(this.state.heartbeatTimerId);
-        }
-        this.dispatchHeartbeat();
-        this.setState({
-            heartbeatTimerId: setInterval(this.dispatchHeartbeat.bind(this), HEARTBEAT_INTERVAL)
-        });
-    }
-
-    dispatchHeartbeat() {
-        const {selectedLanguage, selectedBitrate} = this.props.data;
-        this.props.dispatch(asyncHeartbeat(selectedLanguage, selectedBitrate));
-    }
-
-    onLangSelected(code) {
-        console.info('Lang selected', code);
-        this.clearPlayer();
-        this.props.dispatch(changeLanguage(code));
-        this.props.dispatch(asyncFetchStreams(code));
-    }
+class AdminPage extends PlayerPage {
 
     onToggleTranslation(code) {
         const state = this.props.data.languages[code].Translation ? false : true;
         this.props.dispatch(asyncToggleTranslation(code, state));
     }
 
-    clearPlayer() {
-        if (document.getElementById("jwplayer-container") == null)
-            return;
-        
-        const jwp = window.jwplayer("jwplayer-container");
-        if (jwp && jwp.getState() != null) {
-            jwp.stop();
-            jwp.remove();
-        }
-    }
-
     chooseStream(streams) {
-        if (streams.has(300)) {
-            return streams.get(300);
-        } else {
-            return streams.values().next().value;
-        }
+        return super.chooseStream(streams, 300);
+    }
+    
+    getBaseCssClass() {
+        return 'admin';
     }
 
-    render() {
-        const { broadcast, languages, streams, selectedLanguage } = this.props.data;
+    getTitle() {
+        return super.getTitle() + " - Admin";
+    }
 
-        let langPhrase = '';
+    getPlayerMenu() {
+        const {languages, selectedLanguage} = this.props.data;
+        if (!languages.hasOwnProperty(selectedLanguage))
+            return null;
+
+        const langPhrase = 'Playing ' + languages[selectedLanguage].Name;
+        return (
+            <div className="bitrate-menu">
+                <span className="title">{langPhrase}</span>
+            </div>
+        );
+    }
+
+    getLanguageList() {
+        const {languages, selectedLanguage} = this.props.data;
+
         const langs = [];
         for (let code of Object.keys(languages)) {
             const lang = languages[code];
-            if (code == selectedLanguage) {
-                langPhrase = 'Playing ' + lang.Name;
-            }
             langs.push((
                 <li className={"language " + (code == selectedLanguage ? "active" : "")}
                     key={code}
                     onClick={(e) => this.onLangSelected(code)}>
-                    <div className={"translation-indicator" + (lang.Translation ? ' active' : ' inactive')}></div>
+                    <div className={"translation-indicator " + (lang.Translation ? 'active' : 'inactive')}></div>
                     {lang.Name}
-                    <div className="btn translation-toggle" onClick={(e) => this.onToggleTranslation(code)}>Toggle</div>
+                    <div className="btn translation-toggle" onClick={(e) => this.onToggleTranslation(code)}>
+                        Toggle
+                    </div>
                 </li>)
             );
         }
 
-        let statusPhrase;
-        if (broadcast) {
-            statusPhrase = (<NoBroadcast message="Loading..."/>);
-            if (window.jwplayer &&
-                streams[selectedLanguage] &&
-                window.jwplayer("jwplayer-container").getState() == null) {
-                const s = this.chooseStream(streams[selectedLanguage]),
-                    sources = [{file: s.rtmp}, {file: s.hls}];
-                console.info('Setting up player', sources.map((x) => x.file));
-                window.jwplayer("jwplayer-container").setup({
-                    playlist: [{sources: sources}],
-                    primary: 'flash',
-                    androidhls: true,
-                    autostart: true,
-                    aspectratio: '16:9',
-                    width: "100%"
-                });
-            }
-        } else {
-            this.clearPlayer();
-            const msg = languages.hasOwnProperty(selectedLanguage) ?
-                languages[selectedLanguage].Offline :
-                "No broadcast now";
-            statusPhrase = (<NoBroadcast message={msg}/>);
-        }
-
-        return (
-            <div>
-                <h3>BB Live Broadcast - Admin</h3>
-                <div className="player admin">
-                    <div className="bitrate-menu">
-                        <span className="title">{langPhrase},</span>
-                    </div>
-                    <div id="jwplayer-container">
-                        {statusPhrase}
-                    </div>
-                </div>
-                <div className="languages">
-                    <h4>Languages</h4>
-                    <ul className="languages-list">
-                        {langs}
-                    </ul>
-                </div>
-            </div>
-        );
+        return langs;
     }
+
 }
 
 // REDUX STUFF
