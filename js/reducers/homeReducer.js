@@ -13,7 +13,12 @@
  * add it in the rootReducer.js.
  */
 
-import { RECEIVE_HEARTBEAT, RECEIVE_STREAMS, CHANGE_LANGUAGE, CHANGE_BITRATE } from '../constants/AppConstants';
+import { 
+    RECEIVE_HEARTBEAT, 
+    RECEIVE_STREAMS, 
+    CHANGE_LANGUAGE, 
+    CHANGE_BITRATE, 
+    TOGGLE_TRANSLATION } from '../constants/AppConstants';
 import assignToEmpty from '../utils/assign';
 
 const initialState = {
@@ -43,6 +48,8 @@ function homeReducer(state = initialState, action) {
                 return [x.bitRate, {hls, rtmp}]
             }));
             return assignToEmpty(state, {streams: {[action.lang]: streams}});
+        case TOGGLE_TRANSLATION:
+            return assignToEmpty(state, {languages: {[action.lang]: {Translation: action.state}}});
         default:
             return state;
     }
