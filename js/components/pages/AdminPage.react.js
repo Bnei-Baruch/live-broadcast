@@ -107,6 +107,7 @@ class AdminPage extends Component {
                 });
             }
         } else {
+            this.clearPlayer();
             const msg = languages.hasOwnProperty(selectedLanguage) ?
                 languages[selectedLanguage].Offline :
                 "No broadcast now";
