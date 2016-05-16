@@ -60,7 +60,8 @@
 .language {
     padding: 10px 5px;
 }
-.language.active{
+
+.language.active {
     background-color: blueviolet;
 }
 
@@ -86,6 +87,10 @@
     background-color: tomato;
 }
 
+.loading {
+    background-color: orange;
+    height: 300px;
+}
 
 @media (max-width: 800px) {
     .player {
@@ -97,3 +102,5 @@
         display: block;
     }
 }
+
+

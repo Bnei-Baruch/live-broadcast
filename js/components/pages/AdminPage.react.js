@@ -1,5 +1,6 @@
 import { changeLanguage, asyncHeartbeat ,asyncFetchStreams, asyncToggleTranslation } from '../../actions/AppActions';
 import { HEARTBEAT_INTERVAL } from '../../constants/AppConstants';
+import NoBroadcast from '../NoBroadcast.react'
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
@@ -93,7 +94,7 @@ class AdminPage extends Component {
 
         let statusPhrase;
         if (broadcast) {
-            statusPhrase = (<div className="loading">Loading...</div>);
+            statusPhrase = (<NoBroadcast message="Loading..."/>);
             if (window.jwplayer &&
                 streams[selectedLanguage] &&
                 window.jwplayer("jwplayer-container").getState() == null) {
@@ -114,7 +115,7 @@ class AdminPage extends Component {
             const msg = languages.hasOwnProperty(selectedLanguage) ?
                 languages[selectedLanguage].Offline :
                 "No broadcast now";
-            statusPhrase = (<div className="loading">{msg}</div>);
+            statusPhrase = (<NoBroadcast message={msg}/>);
         }
 
         return (

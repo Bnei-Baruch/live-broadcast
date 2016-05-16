@@ -1,0 +1,20 @@
+.no-broadcast {
+    background-color: lightgray;
+    height: 400px;
+    line-height: 400px;
+    text-align: center;
+    font-size: 24px;
+}
+
+.no-broadcast .message {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+@media (max-width: 800px) {
+    .no-broadcast {
+        height: 200px;
+        line-height: 200px;
+    }
+}

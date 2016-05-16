@@ -1,6 +1,5 @@
-/* Do not write any CSS in here, add it to the appropriate module or make a new one */
-
 @charset "UTF-8";
+/* Do not write any CSS in here, add it to the appropriate module or make a new one */
 
 /* 1. Vendors */
 @import 'vendor/_normalize.css';
@@ -12,4 +11,5 @@
 @import 'base/_base.css';
 
 /* 5. Components */
-@import 'components/_home.css';
+@import 'components/home.css';
+@import 'components/no-broadcast.css';
