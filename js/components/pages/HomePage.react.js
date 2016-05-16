@@ -60,7 +60,7 @@ class HomePage extends Component {
     clearPlayer() {
         if (!!window.jwplayer) {
             const jwp = window.jwplayer("jwplayer-container");
-            if (jwp.getState() != null) {
+            if (!!jwp && jwp.getState() != null) {
                 jwp.stop();
                 jwp.remove();
             }
