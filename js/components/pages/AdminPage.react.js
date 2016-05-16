@@ -1,5 +1,6 @@
 import { changeLanguage, asyncHeartbeat ,asyncFetchStreams, asyncToggleTranslation } from '../../actions/AppActions';
 import { HEARTBEAT_INTERVAL } from '../../constants/AppConstants';
+import isUndefinedOrNull from '../../utils/undefined';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
@@ -11,7 +12,7 @@ class AdminPage extends Component {
     }
 
     componentWillUnmount() {
-        if (!!this.state.heartbeatTimerId) {
+        if (!isUndefinedOrNull(this.state.heartbeatTimerId)) {
             clearInterval(this.state.heartbeatTimerId);
         }
         this.clearPlayer();
@@ -52,9 +53,9 @@ class AdminPage extends Component {
     }
 
     clearPlayer() {
-        if (!!window.jwplayer) {
+        if (!isUndefinedOrNull(window.jwplayer)) {
             const jwp = window.jwplayer("jwplayer-container");
-            if (!!jwp && jwp.getState() != null) {
+            if (!isUndefinedOrNull(jwp) && jwp.getState() != null) {
                 jwp.stop();
                 jwp.remove();
             }
@@ -93,7 +94,7 @@ class AdminPage extends Component {
         let statusPhrase;
         if (!!broadcast) {
             statusPhrase = (<div className="loading">Loading...</div>);
-            if (!!window.jwplayer &&
+            if (!isUndefinedOrNull(window.jwplayer) &&
                 streams[selectedLanguage] &&
                 window.jwplayer("jwplayer-container").getState() == null) {
                 const s = this.chooseStream(streams[selectedLanguage]),
