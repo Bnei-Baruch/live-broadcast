@@ -40,7 +40,7 @@ class AdminPage extends Component {
     }
 
     onLangSelected(code) {
-        console.log('Lang selected', code);
+        console.info('Lang selected', code);
         this.clearPlayer();
         this.props.dispatch(changeLanguage(code));
         this.props.dispatch(asyncFetchStreams(code));
@@ -99,7 +99,7 @@ class AdminPage extends Component {
                 window.jwplayer("jwplayer-container").getState() == null) {
                 const s = this.chooseStream(streams[selectedLanguage]),
                     sources = [{file: s.rtmp}, {file: s.hls}];
-                console.log('Setting up player', sources.map((x) => x.file));
+                console.info('Setting up player', sources.map((x) => x.file));
                 window.jwplayer("jwplayer-container").setup({
                     playlist: [{sources: sources}],
                     primary: 'flash',

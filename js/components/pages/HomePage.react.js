@@ -45,14 +45,14 @@ class HomePage extends Component {
     }
 
     onLangSelected(code) {
-        console.log('Lang selected', code);
+        console.info('Lang selected', code);
         this.clearPlayer();
         this.props.dispatch(changeLanguage(code));
         this.props.dispatch(asyncFetchStreams(code));
     }
 
     onBitrateSelected(bitrate) {
-        console.log('Bitrate selected', bitrate);
+        console.info('Bitrate selected', bitrate);
         this.clearPlayer();
         this.props.dispatch(changeBitrate(bitrate));
     }
@@ -62,7 +62,7 @@ class HomePage extends Component {
             return;
         
         const jwp = window.jwplayer("jwplayer-container");
-        if (jwp.has && jwp.getState() != null) {
+        if (jwp && jwp.getState() != null) {
             jwp.stop();
             jwp.remove();
         }
@@ -120,7 +120,7 @@ class HomePage extends Component {
                 window.jwplayer("jwplayer-container").getState() == null) {
                 const s = this.chooseStream(streams[selectedLanguage], selectedBitrate),
                     sources = [{file: s.rtmp}, {file: s.hls}];
-                console.log('Setting up player', sources.map((x) => x.file));
+                console.info('Setting up player', sources.map((x) => x.file));
                 window.jwplayer("jwplayer-container").setup({
                     playlist: [{sources: sources}],
                     primary: 'flash',
