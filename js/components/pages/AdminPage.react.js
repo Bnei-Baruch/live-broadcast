@@ -5,9 +5,11 @@ import {connect} from 'react-redux';
 
 class AdminPage extends PlayerPage {
 
-    onToggleTranslation(code) {
+    onToggleTranslation(e, code) {
         const state = this.props.data.languages[code].Translation ? false : true;
+        console.info('toggle translation', code, state);
         this.props.dispatch(asyncToggleTranslation(code, state));
+        e.stopPropagation();
     }
 
     chooseStream(streams) {
@@ -47,7 +49,7 @@ class AdminPage extends PlayerPage {
                     onClick={(e) => this.onLangSelected(code)}>
                     <div className={"translation-indicator " + (lang.Translation ? 'active' : 'inactive')}></div>
                     {lang.Name}
-                    <div className="btn translation-toggle" onClick={(e) => this.onToggleTranslation(code)}>
+                    <div className="btn translation-toggle" onClick={(e) => this.onToggleTranslation(e, code)}>
                         Toggle
                     </div>
                 </li>)
