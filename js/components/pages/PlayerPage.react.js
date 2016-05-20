@@ -1,4 +1,4 @@
-import {changeLanguage, changeBitrate, asyncHeartbeat, asyncFetchStreams} from '../../actions/AppActions';
+import {changeLanguage, changeBitrate, changeVolume, asyncHeartbeat, asyncFetchStreams} from '../../actions/AppActions';
 import {HEARTBEAT_INTERVAL} from '../../constants/AppConstants';
 import NoBroadcast from '../NoBroadcast.react'
 import React, {Component} from 'react';
@@ -51,6 +51,24 @@ class PlayerPage extends Component {
         this.clearPlayer();
         this.props.dispatch(changeBitrate(bitrate));
     }
+    
+    setupPlayer(sources, volume) {
+        console.info('Setting up player', sources.map((x) => x.file));
+        window.jwplayer("jwplayer-container").setup({
+            playlist: [{sources: sources}],
+            primary: 'flash',
+            androidhls: true,
+            autostart: true,
+            aspectratio: '16:9',
+            width: "100%"
+        })
+            .setVolume(volume)
+            .on('volume', (e) => {
+                console.info('Volume changed', e.volume);
+                this.props.dispatch(changeVolume(e.volume));
+            })
+        ;
+    }
 
     clearPlayer() {
         if (document.getElementById("jwplayer-container") == null)
@@ -88,7 +106,7 @@ class PlayerPage extends Component {
     }
 
     render() {
-        const {languages, streams, selectedLanguage, selectedBitrate, broadcast} = this.props.data;
+        const {languages, streams, selectedLanguage, selectedBitrate, selectedVolume, broadcast} = this.props.data;
         const statusPhrase = broadcast ?
             "Loading..." :
             languages.hasOwnProperty(selectedLanguage) ?
@@ -103,15 +121,7 @@ class PlayerPage extends Component {
                 window.jwplayer("jwplayer-container").getState() == null) {
                 const s = this.chooseStream(streams[selectedLanguage], selectedBitrate),
                     sources = [{file: s.rtmp}, {file: s.hls}];
-                console.info('Setting up player', sources.map((x) => x.file));
-                window.jwplayer("jwplayer-container").setup({
-                    playlist: [{sources: sources}],
-                    primary: 'flash',
-                    androidhls: true,
-                    autostart: true,
-                    aspectratio: '16:9',
-                    width: "100%"
-                });
+                this.setupPlayer(sources, selectedVolume);
             }
         } else {
             this.clearPlayer();

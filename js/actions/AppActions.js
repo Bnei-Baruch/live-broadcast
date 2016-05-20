@@ -28,8 +28,8 @@
 /* eslint-disable no-use-before-define */
 
 import request from 'superagent-es6-promise';
-import { CHANGE_LANGUAGE, CHANGE_BITRATE, REQUEST_STREAMS, RECEIVE_STREAMS, REQUEST_HEARTBEAT,
-    RECEIVE_HEARTBEAT, TOGGLE_TRANSLATION } from '../constants/AppConstants';
+import { CHANGE_LANGUAGE, CHANGE_BITRATE, CHANGE_VOLUME, TOGGLE_TRANSLATION ,
+    REQUEST_STREAMS, RECEIVE_STREAMS, REQUEST_HEARTBEAT, RECEIVE_HEARTBEAT} from '../constants/AppConstants';
 
 const API_URL = window.BB.config.apiUrl;
 const TIMEOUT = 10000;
@@ -47,6 +47,13 @@ export function changeBitrate(bitrate) {
     return {
         type: CHANGE_BITRATE,
         bitrate: bitrate
+    }
+}
+
+export function changeVolume(volume) {
+    return {
+        type: CHANGE_VOLUME,
+        volume: volume
     }
 }
 

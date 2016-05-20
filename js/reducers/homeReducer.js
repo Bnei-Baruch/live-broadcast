@@ -17,7 +17,8 @@ import {
     RECEIVE_HEARTBEAT, 
     RECEIVE_STREAMS, 
     CHANGE_LANGUAGE, 
-    CHANGE_BITRATE, 
+    CHANGE_BITRATE,
+    CHANGE_VOLUME,
     TOGGLE_TRANSLATION } from '../constants/AppConstants';
 import assignToEmpty from '../utils/assign';
 
@@ -25,7 +26,8 @@ const initialState = {
     languages: {},
     streams: {},
     selectedLanguage: localStorage.getItem('live.selectedLanguage') || 'eng',
-    selectedBitrate: localStorage.getItem('live.selectedBitrate') || 500
+    selectedBitrate: localStorage.getItem('live.selectedBitrate') || 500,
+    selectedVolume: localStorage.getItem('live.selectedVolume') || 80
 };
 
 function homeReducer(state = initialState, action) {
@@ -37,6 +39,9 @@ function homeReducer(state = initialState, action) {
         case CHANGE_BITRATE:
             localStorage.setItem('live.selectedBitrate', action.bitrate);
             return assignToEmpty(state, {selectedBitrate: action.bitrate});
+        case CHANGE_VOLUME:
+            localStorage.setItem('live.selectedVolume', action.volume);
+            return assignToEmpty(state, {selectedVolume: action.volume});
         case RECEIVE_HEARTBEAT:
             return assignToEmpty(state, {
                 languages: action.data.Languages, 
