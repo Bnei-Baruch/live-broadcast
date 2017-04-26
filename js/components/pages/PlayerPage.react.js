@@ -56,8 +56,8 @@ class PlayerPage extends Component {
         console.info('Setting up player', sources.map((x) => x.file));
         window.jwplayer("jwplayer-container").setup({
             playlist: [{sources: sources}],
-            primary: 'flash',
-            androidhls: true,
+            // primary: 'flash',  -- the world is moving away from flash...
+            // androidhls: true,  -- new versions on jwplayer has this true on default
             autostart: true,
             aspectratio: '16:9',
             width: "100%"
@@ -120,7 +120,7 @@ class PlayerPage extends Component {
                 document.getElementById("jwplayer-container") != null &&
                 window.jwplayer("jwplayer-container").getState() == null) {
                 const s = this.chooseStream(streams[selectedLanguage], selectedBitrate),
-                    sources = [{file: s.rtmp}, {file: s.hls}];
+                    sources = [{file: s.hls}, {file: s.rtmp}];
                 this.setupPlayer(sources, selectedVolume);
             }
         } else {
