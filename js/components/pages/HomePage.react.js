@@ -2,10 +2,29 @@ import PlayerPage from './PlayerPage.react'
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
+const DONATE_LINKS = {
+    'Hebrew': { url: 'https://www.kab1.com', label: 'לתרום'},
+    'English': { url: 'https://www.kab1.com/en', label: 'donate'},
+    'Russian': { url: 'https://www.kab1.com/ru', label: 'Внести Вклад'},
+    'Spanish': { url: 'https://www.kab1.com/es', label: 'donar'},
+}
+
 class HomePage extends PlayerPage {
 
     getBaseCssClass() {
         return 'home';
+    }
+
+    getDonateButton(lang) {
+        const cssClasses = lang === 'Hebrew' ? 'btn-donate hebrew' : 'btn-donate';
+        const key = lang in DONATE_LINKS ? lang : 'English';
+        const link = DONATE_LINKS[key];
+        return (
+            <a href={link.url} className={cssClasses}>
+                <label>{link.label}</label>
+                <span>❤</span>
+            </a>
+        );
     }
 
     getPlayerMenu() {
@@ -13,7 +32,8 @@ class HomePage extends PlayerPage {
         if (!languages.hasOwnProperty(selectedLanguage))
             return null;
 
-        const langPhrase = 'Playing ' + languages[selectedLanguage].Name;
+        const selectedLanguageName = languages[selectedLanguage].Name;
+        const langPhrase = 'Playing ' + selectedLanguageName;
 
         const bitrates = [];
         if (streams.hasOwnProperty(selectedLanguage)) {
@@ -33,9 +53,14 @@ class HomePage extends PlayerPage {
 
         return (
             <div className="bitrate-menu">
-                <span className="title">{langPhrase},</span>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <span className="bitrates">Quality: {bitrates}</span>
+                <section className="left">
+                    <span className="title">{langPhrase},</span>
+                    <span className="bitrates">Quality: {bitrates}</span>
+                </section>
+
+                <section className="right">
+                    {this.getDonateButton(selectedLanguageName)}
+                </section>
             </div>
         );
     }
