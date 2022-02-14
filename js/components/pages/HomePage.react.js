@@ -6,6 +6,7 @@ const DONATE_LINKS = {
     'Hebrew': { url: 'https://www.kab1.com', label: 'לתרום'},
     'English': { url: 'https://www.kab1.com/en', label: 'donate'},
     'Russian': { url: 'https://www.kab1.com/ru', label: 'Внести Вклад'},
+    'Ukrainian': { url: 'https://www.kab1.com/ru', label: 'Внести Вклад'},
     'Spanish': { url: 'https://www.kab1.com/es', label: 'donar'},
 }
 
@@ -20,7 +21,7 @@ class HomePage extends PlayerPage {
         const key = lang in DONATE_LINKS ? lang : 'English';
         const link = DONATE_LINKS[key];
         return (
-            <a href={link.url} className={cssClasses}>
+            <a href={link.url} target="_blank" className={cssClasses}>
                 <label>{link.label}</label>
                 <span>❤</span>
             </a>
